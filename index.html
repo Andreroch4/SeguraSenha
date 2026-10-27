@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ferramenta gratuita para aprender a criar senhas seguras e testar a força da sua senha.">
+  <meta name="theme-color" content="#23204f">
+  <title>SeguraSenha</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+  <!-- ===== CABEÇALHO E MENU ===== -->
+  <header class="cabecalho">
+    <div class="container cabecalho-conteudo">
+      <a href="#inicio" class="logo">
+        <span class="logo-icone">🔒</span> Segura<span class="logo-destaque">Senha</span>
+      </a>
+      <button class="botao-menu" id="botaoMenu" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="menu" id="menu">
+        <a href="#verificador">Testar senha</a>
+        <a href="#fatores">O que torna forte</a>
+        <a href="#gerador">Criar senha</a>
+        <a href="#praticas">Boas práticas</a>
+        <a href="#quiz">Quiz</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== INÍCIO ===== -->
+    <section id="inicio" class="destaque">
+      <div class="container destaque-conteudo">
+        <div class="destaque-texto">
+          <span class="etiqueta etiqueta-amarela">Grátis • Sem cadastro • Leve</span>
+          <h1>Sua <span class="marca-texto">senha</span> é a chave da sua vida digital</h1>
+          <p>
+            Aprenda, de um jeito simples, a criar senhas fortes e a manter suas contas
+            longe de golpistas. Funciona até com internet fraca!
+          </p>
+          <div class="botoes botoes-esquerda">
+            <a href="#verificador" class="botao botao-principal">Testar minha senha →</a>
+            <a href="#gerador" class="botao botao-claro">Criar uma senha</a>
+          </div>
+        </div>
+
+        <!-- Mascote: o cadeado "Locke" (desenho feito em SVG, sem imagem externa) -->
+        <div class="mascote" aria-hidden="true">
+          <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <path d="M55 100 V70 a45 45 0 0 1 90 0 V100" fill="none" stroke="#fff8ef" stroke-width="18" stroke-linecap="round"/>
+            <rect x="25" y="95" width="150" height="115" rx="28" fill="#ffc845" stroke="#fff8ef" stroke-width="6"/>
+            <circle cx="72" cy="140" r="9" fill="#23204f"/>
+            <circle cx="128" cy="140" r="9" fill="#23204f"/>
+            <circle cx="75" cy="137" r="3" fill="#fff"/>
+            <circle cx="131" cy="137" r="3" fill="#fff"/>
+            <circle cx="55" cy="165" r="9" fill="#ff6b57" opacity=".55"/>
+            <circle cx="145" cy="165" r="9" fill="#ff6b57" opacity=".55"/>
+            <path d="M82 168 q18 18 36 0" fill="none" stroke="#23204f" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <p class="balao">Oi! Eu sou o <strong>Locke</strong>. Vamos proteger suas contas?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VERIFICADOR DE SENHA ===== -->
+    <section id="verificador" class="secao">
+      <div class="container">
+        <div class="titulo-secao">
+          <span class="etiqueta etiqueta-coral">Passo 1</span>
+          <h2>Teste a força da sua senha</h2>
+        </div>
+
+        <p class="aviso-privacidade">
+          🛡️ <strong>Fique tranquilo:</strong> sua senha <strong>não é enviada</strong> para lugar nenhum.
+          A análise acontece só no seu aparelho. Mesmo assim, prefira testar uma senha parecida, e não a verdadeira.
+        </p>
+
+        <div class="cartao cartao-verificador">
+          <label for="campoSenha" class="rotulo">Digite uma senha:</label>
+          <div class="campo-com-botao">
+            <input type="password" id="campoSenha" placeholder="Ex.: MeuGato@Come3Bananas"
+                   autocomplete="off" autocapitalize="off" spellcheck="false">
+            <button type="button" id="botaoMostrar" class="botao botao-secundario">👁️ Mostrar</button>
+          </div>
+
+          <!-- Barra de força -->
+          <div class="medidor" aria-hidden="true">
+            <div class="medidor-barra" id="medidorBarra"></div>
+          </div>
+
+          <div class="resumo">
+            <div class="resumo-item">
+              <span class="resumo-rotulo">Força</span>
+              <span class="resumo-valor" id="textoForca">—</span>
+            </div>
+            <div class="resumo-item">
+              <span class="resumo-rotulo">Tamanho</span>
+              <span class="resumo-valor" id="textoTamanho">—</span>
+            </div>
+            <div class="resumo-item">
+              <span class="resumo-rotulo">Tempo para descobrir</span>
+              <span class="resumo-valor" id="textoTempo">—</span>
+            </div>
+          </div>
+
+          <div class="grade grade-2 resultado">
+            <div>
+              <h3>📋 Critérios</h3>
+              <ul class="lista-criterios" id="listaCriterios">
+                <li class="vazio">Os critérios aparecem aqui.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>💡 Como melhorar</h3>
+              <ul class="lista-sugestoes" id="listaSugestoes">
+                <li>Digite uma senha acima para receber dicas.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explicação das categorias de tamanho -->
+        <div class="grade grade-3">
+          <div class="cartao categoria curta">
+            <span class="categoria-icone">🐣</span>
+            <h3>Curta</h3>
+            <p class="numero">até 7 caracteres</p>
+            <p>Fácil de descobrir, mesmo com símbolos. <strong>Evite.</strong></p>
+          </div>
+          <div class="cartao categoria media">
+            <span class="categoria-icone">🐥</span>
+            <h3>Média</h3>
+            <p class="numero">8 a 11 caracteres</p>
+            <p>Aceitável só se for bem variada. Melhor aumentar.</p>
+          </div>
+          <div class="cartao categoria longa">
+            <span class="categoria-icone">🦅</span>
+            <h3>Longa</h3>
+            <p class="numero">12 ou mais</p>
+            <p><strong>Recomendado!</strong> Quanto maior, mais difícil de quebrar.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FATORES DE UMA SENHA FORTE ===== -->
+    <section id="fatores" class="secao secao-lilas">
+      <div class="container">
+        <div class="titulo-secao">
+          <span class="etiqueta etiqueta-roxa">Passo 2</span>
+          <h2>O que torna uma senha forte?</h2>
+          <p class="subtitulo">Toque em cada item para saber mais.</p>
+        </div>
+
+        <div class="sanfona">
+          <details open>
+            <summary><span class="sanfona-icone">📏</span> Tamanho (o mais importante!)</summary>
+            <p>
+              Cada letra a mais multiplica o trabalho de quem tenta adivinhar.
+              Uma senha de <strong>8</strong> caracteres pode ser descoberta em horas;
+              uma de <strong>16</strong> pode levar milhares de anos.
+              Por isso, prefira senhas com <strong>12 caracteres ou mais</strong>.
+            </p>
+          </details>
+          <details>
+            <summary><span class="sanfona-icone">🔤</span> Variedade de caracteres</summary>
+            <p>
+              Misture <strong>letras maiúsculas</strong> (A-Z), <strong>minúsculas</strong> (a-z),
+              <strong>números</strong> (0-9) e <strong>símbolos</strong> (! @ # $ %).
+              Quanto mais tipos, mais combinações possíveis.
+            </p>
+          </details>
+          <details>
+            <summary><span class="sanfona-icone">🎲</span> Imprevisibilidade</summary>
+            <p>
+              Evite informações fáceis de descobrir: seu nome, data de nascimento,
+              nome do pet, time de futebol ou sequências como <code>123456</code> e <code>qwerty</code>.
+              Golpistas testam essas opções primeiro.
+            </p>
+          </details>
+          <details>
+            <summary><span class="sanfona-icone">🔁</span> Uma senha para cada conta</summary>
+            <p>
+              Se você usa a mesma senha em tudo e um site vaza seus dados,
+              o golpista consegue entrar em <strong>todas</strong> as suas contas.
+              Use senhas diferentes, principalmente no e-mail e no banco.
+            </p>
+          </details>
+          <details>
+            <summary><span class="sanfona-icone">🤐</span> Sigilo</summary>
+            <p>
+              Não conte sua senha para ninguém, nem para quem diz ser do banco ou do suporte.
+              Empresas sérias <strong>nunca</strong> pedem sua senha por telefone, SMS ou WhatsApp.
+            </p>
+          </details>
+        </div>
+
+        <!-- Comparação de exemplos -->
+        <h3 class="titulo-exemplos">Veja a diferença</h3>
+        <div class="grade grade-3">
+          <div class="cartao exemplo ruim">
+            <span class="selo">Ruim</span>
+            <code>maria1990</code>
+            <p>Nome + ano de nascimento. Descoberta em segundos.</p>
+          </div>
+          <div class="cartao exemplo regular">
+            <span class="selo">Regular</span>
+            <code>M@ria#90!</code>
+            <p>Tem símbolos, mas é curta e previsível.</p>
+          </div>
+          <div class="cartao exemplo bom">
+            <span class="selo">Ótima</span>
+            <code>Cafe-Quente-Na-Varanda-27</code>
+            <p>Longa, fácil de lembrar e difícil de adivinhar.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GERADOR DE SENHA ===== -->
+    <section id="gerador" class="secao">
+      <div class="container">
+        <div class="titulo-secao">
+          <span class="etiqueta etiqueta-verde">Passo 3</span>
+          <h2>Crie uma senha forte e fácil de lembrar</h2>
+          <p class="subtitulo">
+            A dica é usar uma <strong>frase-senha</strong>: várias palavras aleatórias juntas.
+            Ela é longa (forte) e fácil de memorizar.
+          </p>
+        </div>
+
+        <div class="cartao cartao-gerador">
+          <div class="opcoes-gerador">
+            <label for="quantidadePalavras">Palavras:
+              <select id="quantidadePalavras">
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+                <option value="5">5</option>
+              </select>
+            </label>
+            <label><input type="checkbox" id="incluirNumero" checked> Incluir número</label>
+            <label><input type="checkbox" id="incluirSimbolo" checked> Símbolo entre as palavras</label>
+          </div>
+
+          <p class="senha-gerada" id="senhaGerada" aria-live="polite">Clique em "Gerar"</p>
+
+          <div class="botoes">
+            <button type="button" id="botaoGerar" class="botao botao-principal">🎲 Gerar</button>
+            <button type="button" id="botaoCopiar" class="botao botao-secundario">📋 Copiar</button>
+            <button type="button" id="botaoTestar" class="botao botao-secundario">🔍 Testar esta senha</button>
+          </div>
+          <p class="mensagem" id="mensagemGerador" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BOAS PRÁTICAS ===== -->
+    <section id="praticas" class="secao secao-menta">
+      <div class="container">
+        <div class="titulo-secao">
+          <span class="etiqueta etiqueta-amarela">Passo 4</span>
+          <h2>Boas práticas de segurança</h2>
+        </div>
+
+        <div class="grade grade-3">
+          <div class="cartao pratica">
+            <span class="pratica-icone">📱</span>
+            <h3>Ative a verificação em duas etapas</h3>
+            <p>
+              Além da senha, o site pede um código enviado ao seu celular.
+              Mesmo que roubem sua senha, não conseguem entrar. Ative no WhatsApp, e-mail e redes sociais.
+            </p>
+          </div>
+          <div class="cartao pratica">
+            <span class="pratica-icone">🗝️</span>
+            <h3>Use um gerenciador de senhas</h3>
+            <p>
+              É um "cofre" que guarda todas as suas senhas. Você só precisa lembrar de uma.
+              Exemplos gratuitos: Bitwarden e o gerenciador do próprio navegador.
+            </p>
+          </div>
+          <div class="cartao pratica">
+            <span class="pratica-icone">🎣</span>
+            <h3>Cuidado com golpes</h3>
+            <p>
+              Desconfie de mensagens urgentes com links: "sua conta será bloqueada", "você ganhou um prêmio".
+              Na dúvida, não clique. Use o aplicativo oficial.
+            </p>
+          </div>
+          <div class="cartao pratica">
+            <span class="pratica-icone">🔄</span>
+            <h3>Troque quando necessário</h3>
+            <p>
+              Não precisa trocar toda hora. Troque quando suspeitar de invasão, quando um site
+              avisar sobre vazamento ou se contou a senha para alguém.
+            </p>
+          </div>
+          <div class="cartao pratica">
+            <span class="pratica-icone">📶</span>
+            <h3>Atenção ao Wi-Fi público</h3>
+            <p>
+              Evite acessar banco ou fazer compras no Wi-Fi de praças, shoppings e rodoviárias.
+              Prefira os dados móveis do celular.
+            </p>
+          </div>
+          <div class="cartao pratica">
+            <span class="pratica-icone">📝</span>
+            <h3>Não anote à vista</h3>
+            <p>
+              Papel colado no monitor ou nota no celular sem proteção são arriscados.
+              Se precisar anotar, guarde em local seguro.
+            </p>
+          </div>
+        </div>
+
+        <!-- Checklist interativo -->
+        <div class="cartao checklist">
+          <h3>✔️ Meu checklist de segurança</h3>
+          <p>Marque o que você já faz:</p>
+          <ul id="listaChecklist">
+            <li><label><input type="checkbox"> Uso senhas com 12 caracteres ou mais</label></li>
+            <li><label><input type="checkbox"> Não repito a mesma senha em vários sites</label></li>
+            <li><label><input type="checkbox"> Ativei a verificação em duas etapas no WhatsApp</label></li>
+            <li><label><input type="checkbox"> Ativei a verificação em duas etapas no e-mail</label></li>
+            <li><label><input type="checkbox"> Não clico em links suspeitos de SMS ou WhatsApp</label></li>
+            <li><label><input type="checkbox"> Meu celular tem senha ou biometria na tela de bloqueio</label></li>
+          </ul>
+          <div class="medidor medidor-checklist" aria-hidden="true">
+            <div class="medidor-barra" id="barraChecklist"></div>
+          </div>
+          <p class="progresso" id="textoChecklist">Você marcou 0 de 6 itens.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== QUIZ ===== -->
+    <section id="quiz" class="secao">
+      <div class="container">
+        <div class="titulo-secao">
+          <span class="etiqueta etiqueta-coral">Desafio</span>
+          <h2>Teste seus conhecimentos</h2>
+        </div>
+        <div class="cartao quiz">
+          <p class="quiz-contador" id="quizContador"></p>
+          <p class="quiz-pergunta" id="quizPergunta"></p>
+          <div class="quiz-opcoes" id="quizOpcoes"></div>
+          <p class="quiz-explicacao" id="quizExplicacao" aria-live="polite"></p>
+          <button type="button" id="quizProxima" class="botao botao-principal escondido">Próxima pergunta</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer class="rodape">
+    <div class="container">
+      <p class="rodape-logo">🔒 Segura<span class="logo-destaque">Senha</span></p>
+      <p>Projeto de extensão gratuito e educativo, feito com 💛 para ajudar pessoas a se protegerem na internet.</p>
+      <p class="rodape-pequeno">Nenhuma informação digitada neste site é salva ou enviada.</p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
